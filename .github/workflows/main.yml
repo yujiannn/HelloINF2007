@@ -1,0 +1,27 @@
+name: CI for Android App
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Checkout the code from the repository
+        uses: actions/checkout@v2
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Set Up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: echo "🎉 Sending notification to slack channel."
+      - name: Slack Notification
+        uses: craftech-io/slack-action@v1
+        with:
+          slack_webhook_url: "https://hooks.slack.com/services/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"
+        if: always()
